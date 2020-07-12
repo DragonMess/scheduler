@@ -3,121 +3,93 @@ import axios from "axios";
 import Appointment from "components/Appointment/index.js";
 import "components/styles/Application.scss";
 import DayList from "./DayList";
-// import logo from "../../public/images/logo.png";
-// let daysList = [
-//   {
-//     id: 1,
-//     name: "Monday",
-//     spots: 2,
-//   },
-//   {
-//     id: 2,
-//     name: "Tuesday",
-//     spots: 5,
-//   },
-//   {
-//     id: 3,
-//     name: "Wednesday",
-//     spots: 0,
-//   },
-// ];
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
-// const appointmentsData = [
-//   {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer: {
-//         id: 1,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       },
-//     },
-//   },
-//   {
-//     id: 3,
-//     time: "3pm",
-//   },
-
-//   {
-//     id: 4,
-//     time: "4pm",
-//     interview: {
-//       student: "Camilo Pineda",
-//       interviewer: {
-//         id: 1,
-//         name: "Tori Malcolm",
-//         avatar: "https://i.imgur.com/Nmx0Qxo.png",
-//       },
-//     },
-//   },
-// ];
 export default function Application(props) {
-  let [state, setState] = useState({
+  const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {},
+    appointments: [{ id: 0, time: "", interviewer: 0 }],
+    interviewers: {
+      "1": {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      },
+    },
   });
 
-  const setDay = (day) => setState((prev) => ({ ...prev, days }));
+  const setDay = (day) => setState({ ...state, day: day });
 
+  const setDays = (days) =>
+    setState({
+      ...state,
+      days: days,
+    });
+  const setAppointments = (appointments) =>
+    setState({
+      ...state,
+      appointments: appointments,
+    });
+
+  const setInterviewers = (interviewers) =>
+    setState({
+      ...state,
+      interviewers: interviewers,
+    });
+  let appointments;
   useEffect(() => {
     axios
-      .all([axios.get("/api/days"), axios.get("/api/appointments")])
+      .all([
+        axios.get("/api/days"),
+        axios.get("/api/appointments"),
+        axios.get("/api/interviewers"),
+      ])
       .then((all) => {
-        setDays(all[0].data);
-        setAppointments(all[1].data);
+        setState((prev) => ({
+          ...prev,
+          days: all[0].data,
+          appointments: all[1].data,
+          interviewers: all[2].data,
+        }));
       });
   }, []);
+  appointments = getAppointmentsForDay(state, state.day);
+  const schedule = appointments
+    ? appointments.map((appointment) => {
+        const interview = getInterview(state, appointment.interview);
 
-  const [days, setDays] = useState([]);
-
-  const [appointments, setAppointments] = useState({});
-
-  const apointmentsList = Object.keys(appointments).map((appointment) => {
-    return (
-      // <Appointment
-      //   key={appointments[appointment].id}
-      //   id={appointments[appointment].id}
-      //   time={appointments[appointment].time}
-      //   interview={appointments[appointment].interview}
-      // />
-      <Appointment
-        key={appointments[appointment].id}
-        {...appointments[appointment]}
-      />
-    );
-  });
-  // const [day, setDay] = useState("Monday");
+        return (
+          <Appointment
+            key={appointment.id}
+            id={appointment.id}
+            time={appointment.time}
+            interview={interview}
+          />
+        );
+      })
+    : undefined;
   return (
     <main className="layout">
       <section className="sidebar">
         <img
           className="sidebar--centered"
-          src="../../public/images/logo.png"
+          src="images/logo.png"
           alt="Interview Scheduler"
         />
         <hr className="sidebar__separator sidebar--centered" />
 
-        <DayList days={days} day={state.day} setDay={setDay} />
+        <DayList days={state.days} day={state.day} setDay={setDay} />
         <nav className="sidebar__menu"></nav>
         <img
           className="sidebar__lhl sidebar--centered"
           src="images/lhl.png"
           alt="Lighthouse Labs"
         />
-
-        {/* Replace this with the sidebar elements during the "Project Setup & Familiarity" activity. */}
       </section>
       <section className="schedule">
-        {apointmentsList}
+        {schedule}
         <Appointment key="last" time="5pm" />
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
       </section>
     </main>
   );

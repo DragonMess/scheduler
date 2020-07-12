@@ -1,26 +1,39 @@
 
 export function getAppointmentsForDay(state, dayName) { 
-  let someArray = []
-  if (state.days.length === 0) {
-    return []
-  } else { }
-
-  const filteredAppointmentDayname = state.days.filter(day => {
-
-
-    if (day.name === dayName) {
-      // console.log(day.appointments)
-      return day.appointments
-    } else {
-      day.appointments = [];
+  if (state !== undefined || dayName) {
+        let theState = {};
+    for (let days of state.days) {
+      if (days.name === dayName) {
+        theState = days.appointments;
+      }
     }
-
-
-  });
-
-  for (let elem of filteredAppointmentDayname[0].appointments) {
-    someArray.push(elem.toString())
+    let daysAppointments = [];
+    if (theState.length > 0) {
+      for (let appointment of theState) {
+        daysAppointments.push(state.appointments[appointment]);
+      }
+    }
+    return daysAppointments;
+  } else {
+    return []
   }
-  return someArray
+}
+export function getInterview(state, interview) {
+  let theState = {};
+  if (state !== undefined && interview != null) {
 
+    const idInterviewer = interview.interviewer;
+
+    theState = {
+      "student": interview.student,
+      "interviewer": {
+        "id": interview.interviewer,
+        "name": state.interviewers[idInterviewer].name,
+        "avatar": state.interviewers[idInterviewer].avatar
+      }
+    }
+  } else {
+    return null
+  }
+  return theState;
 }
