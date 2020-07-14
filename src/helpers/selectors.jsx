@@ -37,3 +37,28 @@ export function getInterview(state, interview) {
   }
   return theState;
 }
+
+export function getInterviewersForDay(state, dayName) {
+  if (state !== undefined || dayName) {
+    let theState = {};
+    for (let days of state.days) {
+      if (days.name === dayName) {
+        theState = days.appointments;
+      }
+    }
+    let daysAppointments = [];
+    if (theState.length > 0) {
+      for (let appointment of theState) {
+        daysAppointments.push(state.appointments[appointment]);
+      }
+    }
+
+    const InterviewersData = Object.keys((state.interviewers)).map(key => {
+      return (state.interviewers)[key];
+    })
+    return (InterviewersData)
+
+  } else {
+    return []
+  }
+}

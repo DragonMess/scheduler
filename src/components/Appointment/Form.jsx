@@ -6,13 +6,16 @@ export default function Form(props) {
 
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const { interviewers, onCancel, onSave} = props;
-
-  // const onSave = (event) => {
-  //   event.preventDefault();
-  //   setName(name);
-  // }
-
+  const { interviewers, onCancel, onSave, idInterview} = props;
+  const EMPTY = "EMPTY";
+  const handleOnCancel = () => {
+    onCancel(EMPTY)
+  }
+  const handleOnSave = () => {
+    onSave(name, interviewer, idInterview)
+  }
+  
+  
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -32,11 +35,12 @@ export default function Form(props) {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={()=>{ onCancel()
+          <Button danger onClick={() => {
+                                        handleOnCancel()
                                         setName("")
                                         setInterviewer(null)}
                                         }>Cancel</Button>
-          <Button confirm onClick={()=>{onSave(name,interviewer)}}>Save</Button>
+          <Button confirm onClick={handleOnSave}>Save</Button>
         </section>
       </section>
     </main>

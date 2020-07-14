@@ -9,9 +9,7 @@ export default function DayListItem(props) {
   const handleDay = (e) => {
     setDay(name);
     setSelected(true);
-
     setSelected(isSelected);
-    console.log(isSelected, name);
   };
 
   // function to pass the test & show the spots remaining
