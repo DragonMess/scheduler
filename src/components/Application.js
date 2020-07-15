@@ -59,6 +59,37 @@ export default function Application(props) {
       )
       .catch((err) => console.log(err));
   }
+  function editkInterview(id, interview) {
+    const appointmentInt = {
+      ...state.appointments[id],
+      interview,
+    };
+    setState({
+      ...state,
+      appointments: {
+        ...state.appointments,
+        [id]: appointmentInt,
+      },
+    });
+    return axios({
+      url: `/api/appointments/${id}`,
+      method: "PUT",
+      data: appointmentInt,
+    })
+      .then((res) => {
+        console.log(res)
+        setState({
+          ...state,
+          appointments: {
+            ...state.appointments,
+            [id]: appointmentInt,
+          },
+        });
+      }
+
+      )
+      .catch((err) => console.log(err));
+  }
 
   function cancelInterview(id, interview) {
     const appointmentInt = {

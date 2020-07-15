@@ -10,13 +10,15 @@ import Confirm from "components/Appointment/Confirm";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment(props) {
-  const { save, deleted, confirm } = props;
+  const { save, deleted, confirm, id } = props;
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const FORM = "FORM";
   const SAVING = "SAVING";
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
+  const EDITING = "EDITING";
+
   // console.log(props.bookInterview);
   const [isAdd, setChange] = useState(false);
 
@@ -35,33 +37,25 @@ export default function Appointment(props) {
     } else {
       setChange(result);
     }
-    return back(result);
+    return back;
   };
-
-  const onConfirm = (result) => {
-    if (result === undefined) {
-      setChange(false);
-    } else {
-      setChange(result);
-    }
-    // console.log(result);
-    return transition(result);
-  };
-
-  const onDelete = (onConfirm) => {
+  const confirmDelete = () => {
     transition(CONFIRM);
-    console.log(onConfirm);
-    // confirm();
-    // confirm(res).then(() => transition(DELETING));
+  };
 
-    // transition(DELETING);
-    // transition(DELETING);
+  const onDelete = (res) => {
+    transition(DELETING);
     deleted(props.id).then(() => transition(EMPTY));
   };
 
-  const onSave = (name, interviewer, id) => {
+  const onSave = (name, interviewer) => {
     transition(SAVING);
     save(name, interviewer, id).then(() => transition(SHOW));
+  };
+
+  const onEdit = () => {
+    transition(FORM);
+    // save(name, interviewer).then(() => transition(SHOW));
   };
 
   const { mode, transition, back } = useVisualMode(
@@ -79,27 +73,34 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
-          onDelete={onDelete}
+          // onDelete={() => {
+          //   transition(CONFIRM);
+          // }}
+          onDelete={confirmDelete}
           idInterview={props.id}
+          // onEdit={() => transition(FORM)}
+          onEdit={onEdit}
         />
       )}
       {mode === FORM && (
         <Form
-          onCancel={onCancel}
+          onCancel={back}
           name={props.name}
           interviewers={props.interviewers}
           interviewer={props.interviewer}
           onSave={onSave}
-          // bookInterview={bookInterview}
           idInterview={props.id}
         />
       )}
       {mode === SAVING && <Status message="Saving" />}
       {mode === DELETING && <Status message="Deleting" />}
+
+      {mode === EDITING && <Status message="Editing" />}
+
       {mode === CONFIRM && (
         <Confirm
-          onConfirm={onConfirm}
-          onCancel={onCancel}
+          onDelete={onDelete}
+          onCancel={back}
           message="Are you sure you would like to delete?"
         />
       )}

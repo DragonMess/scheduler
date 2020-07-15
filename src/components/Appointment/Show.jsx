@@ -1,11 +1,15 @@
 import React from "react";
 
 export default function Show(props) {
-  const { student, interviewer: { id, name, avatar, idInterview}, onEdit, onDelete } = props;
+  const { student, interviewer: { id, name, avatar, idInterview}, onEdit,onDelete } = props;
   const handleDelete = () => {
     onDelete(idInterview, {interviewer: 0})
-    
+
   }
+      const handleOnSave = () => {
+        onEdit(name, { id, name, avatar, idInterview }, idInterview)
+  }
+  
   
   return (
     <main className="appointment__card appointment__card--show">
@@ -22,7 +26,7 @@ export default function Show(props) {
             className="appointment__actions-button"
             src="images/edit.png"
             alt="Edit"
-            onClick={onEdit}
+            onClick={handleOnSave}
           />
           <img
             className="appointment__actions-button"
