@@ -7,6 +7,7 @@ import Show from "components/Appointment/Show";
 import Form from "components/Appointment/Form";
 import Status from "components/Appointment/Status";
 import Confirm from "components/Appointment/Confirm";
+import Error from "components/Appointment/Error";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment(props) {
@@ -21,7 +22,6 @@ export default function Appointment(props) {
   const ERROR_SAVE = "ERROR_SAVE";
   const ERROR_DELETE = "ERROR_DELETE";
 
-  // console.log(props.bookInterview);
   const [isAdd, setChange] = useState(false);
 
   const onAdd = (result) => {
@@ -45,18 +45,28 @@ export default function Appointment(props) {
     transition(CONFIRM);
   };
 
-  const onDelete = (res) => {
-    transition(DELETING);
+  const onDelete = () => {
+    transition(DELETING, true);
     deleted(props.id)
       .then(() => transition(EMPTY))
-      .catch((error) => transition(EMPTY));
+      .catch((err) => {
+        transition(ERROR_DELETE);
+      });
   };
+  // function destroy(event) {
+  //   transition(DELETING, true);
+  //   props
+  //     .cancelInterview(props.id)
+  //     .then(() => transition(EMPTY))
+  //     .catch((error) => transition(ERROR_DELETE, true));
+  // }
 
-  const onSave = (name, interviewer) => {
-    transition(SAVING);
+  const onSave = (name, interviewer, event) => {
+    transition(SAVING, true);
     save(name, interviewer, id)
       .then(() => transition(SHOW))
-      .catch((err) => transition(ERROR_SAVE));
+      .catch((err) => transition(ERROR_SAVE, true));
+    // setHistory((prev) => [...prev, mode]);
   };
 
   const onEdit = () => {
@@ -103,7 +113,10 @@ export default function Appointment(props) {
 
       {mode === EDITING && <Status message="Editing" />}
 
-      {mode === ERROR_SAVE && <Status message="Error Saving" />}
+      {mode === ERROR_SAVE && <Error message="Error Saving" onCancel={back} />}
+      {mode === ERROR_DELETE && (
+        <Error message="Error Deleting" onCancel={back} />
+      )}
       {mode === CONFIRM && (
         <Confirm
           onDelete={onDelete}

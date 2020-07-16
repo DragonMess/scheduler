@@ -6,7 +6,7 @@ export default function Form(props) {
 
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const { interviewers, onCancel, onSave, idInterview} = props;
+  const { interviewers, onCancel} = props;
 
   const [error, setError] = useState("");
 
@@ -18,6 +18,7 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     }
+    // Validate fct interviewer before save to implement in test
     // if (interviewer === null) {
     //   setError("You need to choose an interviewer");
     //   return;
@@ -42,7 +43,7 @@ export default function Form(props) {
           */
           />
         </form>
-        {/* <section className="appointment__validation">{error}</section> */}
+        <section className="appointment__validation">{error}</section>
         <InterviewerList interviewers={interviewers} value={interviewer} onChange={setInterviewer} />
       </section>
       <section className="appointment__card-right">

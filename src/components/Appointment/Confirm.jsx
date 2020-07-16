@@ -3,10 +3,7 @@ import Button from "components/Button";
 
 export default function Confirm(props) {
   const { message, onDelete, onCancel } = props;
-  console.log(props)
-  const SHOW = "SHOW";
-  const DELETING = "DELETING";
-  const EDITING = "EDITING";
+
 //  Confirm call function onDelet 
 
   return (
