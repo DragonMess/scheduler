@@ -23,19 +23,15 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview,
     };
-    setState({
-      ...state,
-      appointments: {
-        ...state.appointments,
-        [id]: appointmentInt,
-      },
-    });
+    // calcul the lenght of spotsArray and + 1
+    // modify the state
+    // const daysInt = {};
+
     return axios({
       url: `/api/appointments/${id}`,
       method: "PUT",
       data: appointmentInt,
     }).then((res) => {
-      console.log(res);
       setState({
         ...state,
         appointments: {
@@ -53,13 +49,7 @@ export default function useApplicationData() {
       interview: null,
     };
     setState((prevState) => prevState);
-    setState({
-      ...state,
-      appointments: {
-        ...state.appointments,
-        [id]: appointmentInt,
-      },
-    });
+
     return axios({
       url: `/api/appointments/${id}`,
       method: "DELETE",
