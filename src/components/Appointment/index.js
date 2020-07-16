@@ -10,7 +10,7 @@ import Confirm from "components/Appointment/Confirm";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment(props) {
-  const { save, deleted, confirm, id } = props;
+  const { save, deleted, id } = props;
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const FORM = "FORM";
@@ -18,6 +18,8 @@ export default function Appointment(props) {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDITING = "EDITING";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
 
   // console.log(props.bookInterview);
   const [isAdd, setChange] = useState(false);
@@ -31,26 +33,30 @@ export default function Appointment(props) {
     return transition(FORM);
   };
 
-  const onCancel = (result) => {
-    if (result === undefined) {
-      setChange(false);
-    } else {
-      setChange(result);
-    }
-    return back;
-  };
+  // const onCancel = (result) => {
+  //   if (result === undefined) {
+  //     setChange(false);
+  //   } else {
+  //     setChange(result);
+  //   }
+  //   return back;
+  // };
   const confirmDelete = () => {
     transition(CONFIRM);
   };
 
   const onDelete = (res) => {
     transition(DELETING);
-    deleted(props.id).then(() => transition(EMPTY));
+    deleted(props.id)
+      .then(() => transition(EMPTY))
+      .catch((error) => transition(EMPTY));
   };
 
   const onSave = (name, interviewer) => {
     transition(SAVING);
-    save(name, interviewer, id).then(() => transition(SHOW));
+    save(name, interviewer, id)
+      .then(() => transition(SHOW))
+      .catch((err) => transition(ERROR_SAVE));
   };
 
   const onEdit = () => {
@@ -97,6 +103,7 @@ export default function Appointment(props) {
 
       {mode === EDITING && <Status message="Editing" />}
 
+      {mode === ERROR_SAVE && <Status message="Error Saving" />}
       {mode === CONFIRM && (
         <Confirm
           onDelete={onDelete}

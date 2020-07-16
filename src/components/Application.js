@@ -59,7 +59,7 @@ export default function Application(props) {
       )
       .catch((err) => console.log(err));
   }
-  function editkInterview(id, interview) {
+  function editInterview(id, interview) {
     const appointmentInt = {
       ...state.appointments[id],
       interview,
@@ -110,7 +110,6 @@ export default function Application(props) {
       method: "DELETE",
     })
       .then((res) => {
-        
         setState({
           ...state,
           appointments: {
@@ -121,9 +120,11 @@ export default function Application(props) {
       }
 
       )
-      .catch((err) => console.log(err));
+      .catch((err) => delError(err));
   }
-
+const delError = (err)=>{
+return err;
+}
   function deleted(id,interviewer) {
     const interview = {
       student: null,
@@ -136,7 +137,6 @@ export default function Application(props) {
       student: name,
       interviewer,
     };
-
    return bookInterview(idAppoint, interview);
   };
   function confirm(res) {
