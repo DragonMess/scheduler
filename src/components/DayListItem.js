@@ -3,9 +3,11 @@ import "components/styles/DayListItem.scss";
 import classnames from "classnames/bind";
 
 export default function DayListItem(props) {
-  const { name, spots, setDay, selected } = props;
+  const { name, spotsData, setDay, selected } = props;
   const [isSelected, setSelected] = useState(selected);
   // console.log("hi", selected);
+  const spots = spotsData[name];
+  // const spots = spotsData.name;
   const handleDay = (e) => {
     setDay(name);
     setSelected(true);

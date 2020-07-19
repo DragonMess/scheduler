@@ -1,5 +1,5 @@
 import { useState } from "react";
-export default function useVisualMode(initial) {
+export default function useMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
 

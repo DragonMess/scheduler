@@ -7,6 +7,7 @@ import {
   getAppointmentsForDay,
   getInterview,
   getInterviewersForDay,
+  getSpotsForDay
 } from "helpers/selectors";
 
 export default function Application(props) {
@@ -17,14 +18,15 @@ export default function Application(props) {
           deleted,
           cancelInterview,
         } = useApplicationData();
-
-
+        
+  const spotsData=getSpotsForDay(state);
   const appointmentsData = getAppointmentsForDay(state, state.day);
   const schedule = appointmentsData
     ? appointmentsData.map((appointment) => {
         const interview = getInterview(state, appointment.interview);
         const interviewers = getInterviewersForDay(state, state.day);
-
+      // console.log("interv: ", interview)
+      // console.log("appointmentsData: ", appointmentsData)
         return (
           <Appointment
             key={appointment.id}
@@ -50,7 +52,7 @@ export default function Application(props) {
         />
         <hr className="sidebar__separator sidebar--centered" />
 
-        <DayList days={state.days} day={state.day} setDay={setDay} />
+        <DayList days={state.days} day={state.day} spotsData={spotsData} setDay={setDay} />
         <nav className="sidebar__menu"></nav>
         <img
           className="sidebar__lhl sidebar--centered"
