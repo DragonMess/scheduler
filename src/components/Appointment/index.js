@@ -76,11 +76,13 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          // in other way below
           // onDelete={() => {
           //   transition(CONFIRM);
           // }}
           onDelete={confirmDelete}
           idInterview={props.id}
+          // in other way below
           // onEdit={() => transition(FORM)}
           onEdit={onEdit}
         />
@@ -113,7 +115,9 @@ export default function Appointment(props) {
           message="Are you sure you would like to delete?"
         />
       )}
-      {/* {props.interview ? (
+
+      {/* Other way to do this =>
+      {props.interview ? (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}

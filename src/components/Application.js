@@ -7,9 +7,7 @@ import {
   getAppointmentsForDay,
   getInterview,
   getInterviewersForDay,
-  getSpotsForDay
 } from "helpers/selectors";
-import { template } from "@babel/core";
 
 export default function Application(props) {
 
@@ -21,14 +19,11 @@ export default function Application(props) {
 
         } = useApplicationData();
         
-  // const spotsData=getSpotsForDay(state);
   const appointmentsData = getAppointmentsForDay(state, state.day);
   const schedule = appointmentsData
     ? appointmentsData.map((appointment) => {
         const interview = getInterview(state, appointment.interview);
         const interviewers = getInterviewersForDay(state, state.day);
-      // console.log("interv: ", interview)
-      // console.log("appointmentsData: ", appointmentsData)
         return (
           <Appointment
             key={appointment.id}

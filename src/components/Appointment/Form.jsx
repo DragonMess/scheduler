@@ -10,8 +10,6 @@ export default function Form(props) {
 
   const [error, setError] = useState("");
 
-//onCancel call back in the index.js
-
 // Validate fct staudent name and interviewer before save
   function validate() {
     if (name === "") {
@@ -38,9 +36,7 @@ export default function Form(props) {
             type="text"
             placeholder="Enter Student Name"
             onChange={(e)=>{setName(e.target.value)}}
-          /*
-            This must be a controlled component
-          */
+
           />
         </form>
         <section className="appointment__validation">{error}</section>

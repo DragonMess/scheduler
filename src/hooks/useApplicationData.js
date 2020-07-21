@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios, * as others from "axios";
 import "components/styles/Application.scss";
-import { array } from "prop-types";
 
 const getSpotsForDay = (day, appointments) =>
   day.appointments.length -
@@ -59,16 +58,8 @@ export default function useApplicationData() {
         }),
         appointments,
       });
-
-      // updateSpots(state.day);
     });
   }
-
-  // const updateSpots = (currentDay) => {
-  //   axios.get("/api/days").then((res) => {
-  //     setDayInDaysList(currentDay, res.data);
-  //   });
-  // };
 
   function cancelInterview(id, interview) {
     const appointmentInt = {
@@ -90,7 +81,6 @@ export default function useApplicationData() {
         appointments,
       });
     });
-    // .catch((err) => console.log(err));
   }
 
   function deleted(id, interviewer) {

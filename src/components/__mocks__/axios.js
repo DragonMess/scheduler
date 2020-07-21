@@ -53,7 +53,6 @@ const fixtures = {
   },
 };
 export default {
-  // defaults: { baseURL: "" },
   get: jest.fn((url) => {
     console.log(url);
     if (url === "/api/days") {
