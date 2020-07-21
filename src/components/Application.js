@@ -9,6 +9,7 @@ import {
   getInterviewersForDay,
   getSpotsForDay
 } from "helpers/selectors";
+import { template } from "@babel/core";
 
 export default function Application(props) {
 
@@ -17,9 +18,10 @@ export default function Application(props) {
           save,
           deleted,
           cancelInterview,
+
         } = useApplicationData();
         
-  const spotsData=getSpotsForDay(state);
+  // const spotsData=getSpotsForDay(state);
   const appointmentsData = getAppointmentsForDay(state, state.day);
   const schedule = appointmentsData
     ? appointmentsData.map((appointment) => {
@@ -52,7 +54,7 @@ export default function Application(props) {
         />
         <hr className="sidebar__separator sidebar--centered" />
 
-        <DayList days={state.days} day={state.day} spotsData={spotsData} setDay={setDay} />
+        <DayList  days={state.days} day={state.day} setDay={setDay} />
         <nav className="sidebar__menu"></nav>
         <img
           className="sidebar__lhl sidebar--centered"

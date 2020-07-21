@@ -47,9 +47,12 @@ export default function Appointment(props) {
   };
 
   const onSave = (name, interviewer, event) => {
+    console.log("before");
     transition(SAVING, true);
+    console.log("after");
     save(name, interviewer, props.id)
       .then(() => {
+        console.log("save");
         transition(SHOW);
       })
       .catch((err) => transition(ERROR_SAVE, true));

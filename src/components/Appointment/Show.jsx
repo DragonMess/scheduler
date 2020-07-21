@@ -1,7 +1,11 @@
 import React from "react";
 
 export default function Show(props) {
-  const { student, interviewer: { id, name, avatar, idInterview}, onEdit,onDelete } = props;
+  const { student, 
+    interviewer: { id, name, avatar, idInterview}={}, 
+    onEdit,
+    onDelete 
+  }  = props;
   const handleDelete = () => {
     onDelete(idInterview, {interviewer: 0})
 

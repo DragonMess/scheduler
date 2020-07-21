@@ -3,13 +3,14 @@ import "components/styles/DayListItem.scss";
 import classnames from "classnames/bind";
 
 export default function DayListItem(props) {
-  const { name, spotsData, setDay, selected } = props;
+  const { name, setDay, selected, spots } = props;
   const [isSelected, setSelected] = useState(selected);
   // console.log("hi", selected);
-  const spots = spotsData[name];
+  // let spots;
   // const spots = spotsData.name;
   const handleDay = (e) => {
     setDay(name);
+    // spots = spotsData[name];
     setSelected(true);
     setSelected(isSelected);
   };
@@ -17,7 +18,7 @@ export default function DayListItem(props) {
   // function to pass the test & show the spots remaining
   const formatSpots = (spots) => {
     let res;
-    if (spots === 0) {
+    if (spots < 1) {
       res = "no spots remaining";
     }
     if (spots === 1) {
@@ -35,8 +36,10 @@ export default function DayListItem(props) {
     "day-list__item--full": spots === 0,
   });
   return (
-    <li className={dayClass} onClick={handleDay}>
-      <h2 className="text--regular">{name}</h2>
+    <li data-testid="day" className={dayClass} onClick={handleDay}>
+      <h2 data-testid="day" className="text--regular">
+        {name}
+      </h2>
       <h3 className="text--light">{formatSpots(spots)}</h3>
     </li>
   );

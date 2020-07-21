@@ -3,6 +3,13 @@ import axios, * as others from "axios";
 import "components/styles/Application.scss";
 import { array } from "prop-types";
 
+const getSpotsForDay = (day, appointments) =>
+  day.appointments.length -
+  day.appointments.reduce(
+    (count, id) => (appointments[id].interview ? count + 1 : count),
+    0
+  );
+
 export default function useApplicationData() {
   const [state, setState] = useState({
     day: "Monday",
@@ -14,23 +21,6 @@ export default function useApplicationData() {
   const setDay = (day) => {
     setState({ ...state, day });
   };
-
-  // const setDayInDaysList = (currentDay, returnedDayList) => {
-  //   let indexOfMatchedDay = 0;
-  //   const matchedDay = returnedDayList.filter((day, index) => {
-  //     if (day.name === currentDay) {
-  //       indexOfMatchedDay = index;
-  //       return day;
-  //     }
-  //   });
-
-  //   const updatedDaysArray = state.days.slice();
-  //   updatedDaysArray[indexOfMatchedDay] = matchedDay[0];
-  //   setState({
-  //     ...state,
-  //     days: updatedDaysArray,
-  //   });
-  // };
 
   useEffect(() => {
     Promise.all([
@@ -48,21 +38,28 @@ export default function useApplicationData() {
   }, []);
 
   function bookInterview(id, interview) {
+    const appointments = {
+      //open appointments in state
+      ...state.appointments, //keep the actual state.appointments
+      [id]: {
+        // open id in appointments
+        ...state.appointments[id], //
+        id,
+        interview,
+      },
+    };
     return axios.put(`/api/appointments/${id}`, { interview }).then((res) => {
       const idDay = 0;
       setState({
         ...state, //keep
-        appointments: {
-          //open appointments in state
-          ...state.appointments, //keep the actual state.appointments
-          [id]: {
-            // open id in appointments
-            ...state.appointments[id], //
-            id,
-            interview,
-          },
-        },
+        days: state.days.map((day) => {
+          return day.appointments.includes(id)
+            ? { ...day, spots: getSpotsForDay(day, appointments) }
+            : day;
+        }),
+        appointments,
       });
+
       // updateSpots(state.day);
     });
   }
@@ -78,19 +75,24 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: null,
     };
-
-    setState((prevState) => prevState);
+    const appointments = {
+      ...state.appointments,
+      [id]: appointmentInt,
+    };
     return axios.delete(`/api/appointments/${id}`).then((res) => {
       setState({
         ...state,
-        appointments: {
-          ...state.appointments,
-          [id]: appointmentInt,
-        },
+        days: state.days.map((day) => {
+          return day.appointments.includes(id)
+            ? { ...day, spots: getSpotsForDay(day, appointments) }
+            : day;
+        }),
+        appointments,
       });
     });
     // .catch((err) => console.log(err));
   }
+
   function deleted(id, interviewer) {
     const interview = {
       student: null,

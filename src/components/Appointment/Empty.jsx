@@ -8,7 +8,7 @@ onAdd(true)
 }
 
   return (
-    <main className="appointment__add">
+    <main data-testid="empty" className="appointment__add">
       <img
         className="appointment__add-button"
         src="images/add.png"
